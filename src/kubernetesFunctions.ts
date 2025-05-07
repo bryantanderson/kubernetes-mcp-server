@@ -1,5 +1,5 @@
 import { KUBERNETES_API_REQUEST_TIMEOUT_SECONDS } from "./constants";
-import { getKubernetesApiClient } from "./kubernetes";
+import { getKubernetesApiClient } from "./kubernetesClient";
 
 async function listNamespaces() {
   try {
@@ -15,16 +15,36 @@ async function listNamespaces() {
 async function createNamespace(namespaceName: string) {
   try {
     const apiClient = getKubernetesApiClient();
-    apiClient.createNamespace({
+    const namespace = await apiClient.createNamespace({
       body: {
         metadata: {
           name: namespaceName,
         },
       },
     });
+    return namespace;
   } catch (error) {
     console.log(`Couldn't create namespace ${namespaceName}. Error: ${JSON.stringify(error)}`)
   }
 }
 
-export { listNamespaces, createNamespace };
+async function listConfigMaps(namespaceName?: string) {
+  try {
+    const apiClient = getKubernetesApiClient();
+    
+    if (namespaceName) {
+      return await apiClient.listNamespacedConfigMap({
+        namespace: namespaceName,
+        timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+      });
+    }
+
+    return await apiClient.listConfigMapForAllNamespaces({
+      timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+    });
+  } catch (error) {
+    console.log(`Couldn't list configmaps for namespace ${namespaceName}. Error: ${JSON.stringify(error)}`)
+  }
+}
+
+export { listConfigMaps, listNamespaces, createNamespace };

@@ -1,9 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { registerTools } from "./tools";
 
-// Create server instance
 const server = new McpServer({
-  name: "basic-mcp-server",
+  name: "kubernetes-mcp-server",
   version: "1.0.0",
   capabilities: {
     resources: {},
@@ -13,6 +13,10 @@ const server = new McpServer({
 
 async function main() {
   const transport = new StdioServerTransport();
+
+  // Register resources, tools, and prompts
+  registerTools(server);
+
   await server.connect(transport);
   console.error("MCP Server running on stdio");
 }
