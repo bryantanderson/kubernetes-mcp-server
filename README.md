@@ -12,7 +12,17 @@ Without an active cluster set as the current context, the MCP server will not be
 
 ## Running the server
 
-`npm run build && node ./dist/index.js`
+Locally: `npm run build && node ./dist/index.js`
+
+Using Claude Desktop: Add the following to the `mcpServers` key of your `claude_desktop_config.json` file:
+```
+"kubernetes": {
+	"command": "node",
+	"args": ["/Users/bry24/Documents/Projects/basic-mcp/dist/index.js"]
+}
+```
+
+Note that the alias of the server can be anything.
 
 ## Debugging the server
 

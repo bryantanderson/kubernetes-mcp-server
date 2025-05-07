@@ -14,7 +14,7 @@ async function main() {
     // Register resources, tools, and prompts
     registerTools(server);
     await server.connect(transport);
-    console.error("MCP Server running on stdio");
+    console.info("MCP Server running on stdio");
 }
 main()
     .catch((error) => {
