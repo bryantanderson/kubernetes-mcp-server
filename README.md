@@ -22,7 +22,7 @@ Using Claude Desktop: Add the following to the `mcpServers` key of your `claude_
 }
 ```
 
-Note that the alias of the server can be anything.
+Note that the alias of the server can be anything. The following [guide](https://modelcontextprotocol.io/quickstart/user) is a useful example of how to configure MCP in the Claude Desktop App.
 
 ## Debugging the server
 
