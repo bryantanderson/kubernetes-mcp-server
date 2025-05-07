@@ -1,5 +1,5 @@
-import { createNamespace, listConfigMaps, listNamespaces, scaleDeployment, } from "./kubernetesFunctions.js";
-import { CreateNamespaceSchema, ListConfigMapsSchema, ListNamespacesSchema, ScaleDeploymentSchema, } from "./schema.js";
+import { createNamespace, listConfigMaps, listNamespaces, scaleDeployment, executeCommandInPod, } from "./kubernetesFunctions.js";
+import { ExecuteCommandInPodSchema, CreateNamespaceSchema, ListConfigMapsSchema, ListNamespacesSchema, ScaleDeploymentSchema, } from "./schema.js";
 // TODO: Expose more fields than just the names
 function registerKubernetesTools(server) {
     server.tool("list_namespaces", "Lists all namespaces in the Kubernetes cluster", ListNamespacesSchema.shape, async () => {
@@ -88,6 +88,27 @@ function registerKubernetesTools(server) {
                     text: `Successfully scaled deployment ${args.deploymentName} in namespace ${args.namespace} to ${args.desiredReplicas} replicas`,
                 },
             ],
+        };
+    });
+    server.tool('execute_command_in_pod', 'Executes a command in a pod in a Kubernetes namespace', ExecuteCommandInPodSchema.shape, async (args) => {
+        const result = await executeCommandInPod(args);
+        if (!result) {
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Failed to execute command in pod in namespace ${args.namespace}`,
+                    }
+                ]
+            };
+        }
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `Successfully executed command in pod in namespace ${args.namespace}`,
+                }
+            ]
         };
     });
 }
