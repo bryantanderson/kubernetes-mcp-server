@@ -18,7 +18,10 @@ async function main() {
 	registerTools(server);
 
 	await server.connect(transport);
-	console.info("MCP Server running on stdio");
+
+  // NOTE: We cannot log to stdout while using StdioServerTransport
+  // The MCP Client will attempt to parse the log as JSON, fail, and throw an error
+	console.error("MCP Server running on stdio");
 }
 
 main().catch((error) => {

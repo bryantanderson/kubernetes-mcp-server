@@ -14,7 +14,9 @@ async function main() {
     // Register resources, tools, and prompts
     registerTools(server);
     await server.connect(transport);
-    console.info("MCP Server running on stdio");
+    // NOTE: We cannot log to stdout while using StdioServerTransport
+    // The MCP Client will attempt to parse the log as JSON and this crashes Claude Desktop
+    console.error("MCP Server running on stdio");
 }
 main().catch((error) => {
     console.error("Fatal error in main():", error);
