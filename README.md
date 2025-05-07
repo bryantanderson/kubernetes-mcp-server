@@ -24,6 +24,10 @@ Using Claude Desktop: Add the following to the `mcpServers` key of your `claude_
 
 Note that the alias of the server can be anything. The following [guide](https://modelcontextprotocol.io/quickstart/user) is a useful example of how to configure MCP in the Claude Desktop App.
 
+Once the MCP server is configured correctly, you should be able to use the tools to interact with your cluster. Example:
+
+[Example Screenshot](./assets/Screenshot%202025-05-07%20at%2014.59.22.png)
+
 ## Debugging the server
 
 Using MCP inspector: `npx @modelcontextprotocol/inspector node ./dist/index.js`
