@@ -1,50 +1,99 @@
 import { KUBERNETES_API_REQUEST_TIMEOUT_SECONDS } from "./constants";
-import { getKubernetesApiClient } from "./kubernetesClient";
+import {
+	getKubernetesAppsApiClient,
+	getKubernetesCoreApiClient,
+} from "./kubernetesClient";
 
 async function listNamespaces() {
-  try {
-    const apiClient = getKubernetesApiClient();
-    return await apiClient.listNamespace({
-      timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
-    });
-  } catch (error) {
-    console.log(`Couldn't list namespaces. Error: ${JSON.stringify(error)}`)
-  }
+	try {
+		const apiClient = getKubernetesCoreApiClient();
+		return await apiClient.listNamespace({
+			timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+		});
+	} catch (error) {
+		console.log(
+			`Couldn't list namespaces. Error: ${JSON.stringify(error)}`
+		);
+	}
 }
 
 async function createNamespace(namespaceName: string) {
-  try {
-    const apiClient = getKubernetesApiClient();
-    const namespace = await apiClient.createNamespace({
-      body: {
-        metadata: {
-          name: namespaceName,
-        },
-      },
-    });
-    return namespace;
-  } catch (error) {
-    console.log(`Couldn't create namespace ${namespaceName}. Error: ${JSON.stringify(error)}`)
-  }
+	try {
+		const apiClient = getKubernetesCoreApiClient();
+		const namespace = await apiClient.createNamespace({
+			body: {
+				metadata: {
+					name: namespaceName,
+				},
+			},
+		});
+		return namespace;
+	} catch (error) {
+		console.log(
+			`Couldn't create namespace ${namespaceName}. Error: ${JSON.stringify(
+				error
+			)}`
+		);
+	}
 }
 
 async function listConfigMaps(namespaceName?: string) {
-  try {
-    const apiClient = getKubernetesApiClient();
-    
-    if (namespaceName) {
-      return await apiClient.listNamespacedConfigMap({
-        namespace: namespaceName,
-        timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
-      });
-    }
+	try {
+		const apiClient = getKubernetesCoreApiClient();
 
-    return await apiClient.listConfigMapForAllNamespaces({
-      timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
-    });
-  } catch (error) {
-    console.log(`Couldn't list configmaps for namespace ${namespaceName}. Error: ${JSON.stringify(error)}`)
-  }
+		if (namespaceName) {
+			return await apiClient.listNamespacedConfigMap({
+				namespace: namespaceName,
+				timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+			});
+		}
+
+		return await apiClient.listConfigMapForAllNamespaces({
+			timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+		});
+	} catch (error) {
+		console.log(
+			`Couldn't list configmaps for namespace ${namespaceName}. Error: ${JSON.stringify(
+				error
+			)}`
+		);
+	}
 }
 
-export { listConfigMaps, listNamespaces, createNamespace };
+type ScaleDeploymentParams = {
+	namespace: string;
+	deploymentName: string;
+	desiredReplicas: number;
+};
+
+async function scaleDeployment(params: ScaleDeploymentParams) {
+	try {
+		const apiClient = getKubernetesAppsApiClient();
+		const deployment = await apiClient.readNamespacedDeployment({
+			name: params.deploymentName,
+			namespace: params.namespace,
+		});
+
+		if (!deployment) {
+			return;
+		}
+
+		return await apiClient.patchNamespacedDeployment({
+			name: params.deploymentName,
+			namespace: params.namespace,
+			body: {
+				spec: {
+					replicas: params.desiredReplicas,
+				},
+			},
+		});
+	} catch (error) {
+		console.log(
+			`Couldn't scale up deployment ${
+				params.deploymentName
+			} in namespace ${params.namespace}. Error: ${JSON.stringify(error)}`
+		);
+	}
+}
+
+export { createNamespace, listConfigMaps, listNamespaces, scaleDeployment };

@@ -1,9 +1,15 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
-import { createNamespace, listConfigMaps, listNamespaces } from "./kubernetesFunctions";
+import {
+	createNamespace,
+	listConfigMaps,
+	listNamespaces,
+	scaleDeployment,
+} from "./kubernetesFunctions";
 import {
 	CreateNamespaceSchema,
 	ListConfigMapsSchema,
 	ListNamespacesSchema,
+	ScaleDeploymentSchema,
 } from "./schema";
 
 // TODO: Expose more fields than just the names
@@ -17,7 +23,12 @@ function registerKubernetesTools(server: McpServer) {
 
 			if (!namespaces) {
 				return {
-					content: [],
+					content: [
+						{
+							type: "text",
+							text: "Failed to list namespaces",
+						},
+					],
 				};
 			}
 
@@ -43,18 +54,23 @@ function registerKubernetesTools(server: McpServer) {
 
 			if (!namespace) {
 				return {
-					content: [],
+					content: [
+						{
+							type: "text",
+							text: `Failed to create namespace ${args.namespace}`,
+						},
+					],
 				};
 			}
 
-			return { 
-        content: [
-          {
-            type: 'text',
-            text: `Namespace ${namespace?.metadata?.name} created successfully`,
-          }
-        ]
-      }
+			return {
+				content: [
+					{
+						type: "text",
+						text: `Namespace ${namespace?.metadata?.name} created successfully`,
+					},
+				],
+			};
 		}
 	);
 
@@ -67,7 +83,12 @@ function registerKubernetesTools(server: McpServer) {
 
 			if (!configMaps) {
 				return {
-					content: [],
+					content: [
+						{
+							type: "text",
+							text: `Failed to list configmaps for namespace ${args.namespace}`,
+						},
+					],
 				};
 			}
 
@@ -78,6 +99,35 @@ function registerKubernetesTools(server: McpServer) {
 						text: configMaps.items
 							.map((configMap) => configMap.metadata?.name)
 							.join("\n"),
+					},
+				],
+			};
+		}
+	);
+
+	server.tool(
+		"scale_deployment",
+		"Scales the replica count of a deployment in a Kubernetes namespace",
+		ScaleDeploymentSchema.shape,
+		async (args) => {
+			const deployment = await scaleDeployment(args);
+
+			if (!deployment) {
+				return {
+					content: [
+            {
+              type: "text",
+              text: `Failed to scale deployment ${args.deploymentName} in namespace ${args.namespace} to ${args.desiredReplicas} replicas`,
+            }
+          ],
+				};
+			}
+
+			return {
+				content: [
+					{
+						type: "text",
+						text: `Successfully scaled deployment ${args.deploymentName} in namespace ${args.namespace} to ${args.desiredReplicas} replicas`,
 					},
 				],
 			};

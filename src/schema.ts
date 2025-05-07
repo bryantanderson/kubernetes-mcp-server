@@ -10,5 +10,15 @@ const CreateNamespaceSchema = z.object({
   namespace: z.string(),
 });
 
-export { ListNamespacesSchema, ListConfigMapsSchema, CreateNamespaceSchema };
+const ScaleDeploymentSchema = z.object({
+  namespace: z.string(),
+  deploymentName: z.string(),
+  desiredReplicas: z.number(),
+});
 
+export {
+	ListNamespacesSchema,
+	ListConfigMapsSchema,
+	CreateNamespaceSchema,
+	ScaleDeploymentSchema,
+};
