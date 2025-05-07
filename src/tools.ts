@@ -1,16 +1,16 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import {
 	createNamespace,
 	listConfigMaps,
 	listNamespaces,
 	scaleDeployment,
-} from "./kubernetesFunctions";
+} from "./kubernetesFunctions.js";
 import {
 	CreateNamespaceSchema,
 	ListConfigMapsSchema,
 	ListNamespacesSchema,
 	ScaleDeploymentSchema,
-} from "./schema";
+} from "./schema.js";
 
 // TODO: Expose more fields than just the names
 function registerKubernetesTools(server: McpServer) {

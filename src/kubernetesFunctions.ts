@@ -1,8 +1,8 @@
-import { KUBERNETES_API_REQUEST_TIMEOUT_SECONDS } from "./constants";
+import { KUBERNETES_API_REQUEST_TIMEOUT_SECONDS } from "./constants.js";
 import {
 	getKubernetesAppsApiClient,
 	getKubernetesCoreApiClient,
-} from "./kubernetesClient";
+} from "./kubernetesClient.js";
 
 async function listNamespaces() {
 	try {

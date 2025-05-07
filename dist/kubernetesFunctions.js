@@ -1,16 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNamespace = createNamespace;
-exports.listConfigMaps = listConfigMaps;
-exports.listNamespaces = listNamespaces;
-exports.scaleDeployment = scaleDeployment;
-const constants_1 = require("./constants");
-const kubernetesClient_1 = require("./kubernetesClient");
+import { KUBERNETES_API_REQUEST_TIMEOUT_SECONDS } from "./constants.js";
+import { getKubernetesAppsApiClient, getKubernetesCoreApiClient, } from "./kubernetesClient.js";
 async function listNamespaces() {
     try {
-        const apiClient = (0, kubernetesClient_1.getKubernetesCoreApiClient)();
+        const apiClient = getKubernetesCoreApiClient();
         return await apiClient.listNamespace({
-            timeoutSeconds: constants_1.KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+            timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
         });
     }
     catch (error) {
@@ -19,7 +13,7 @@ async function listNamespaces() {
 }
 async function createNamespace(namespaceName) {
     try {
-        const apiClient = (0, kubernetesClient_1.getKubernetesCoreApiClient)();
+        const apiClient = getKubernetesCoreApiClient();
         const namespace = await apiClient.createNamespace({
             body: {
                 metadata: {
@@ -35,15 +29,15 @@ async function createNamespace(namespaceName) {
 }
 async function listConfigMaps(namespaceName) {
     try {
-        const apiClient = (0, kubernetesClient_1.getKubernetesCoreApiClient)();
+        const apiClient = getKubernetesCoreApiClient();
         if (namespaceName) {
             return await apiClient.listNamespacedConfigMap({
                 namespace: namespaceName,
-                timeoutSeconds: constants_1.KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+                timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
             });
         }
         return await apiClient.listConfigMapForAllNamespaces({
-            timeoutSeconds: constants_1.KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
+            timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
         });
     }
     catch (error) {
@@ -52,7 +46,7 @@ async function listConfigMaps(namespaceName) {
 }
 async function scaleDeployment(params) {
     try {
-        const apiClient = (0, kubernetesClient_1.getKubernetesAppsApiClient)();
+        const apiClient = getKubernetesAppsApiClient();
         const deployment = await apiClient.readNamespacedDeployment({
             name: params.deploymentName,
             namespace: params.namespace,
@@ -74,3 +68,4 @@ async function scaleDeployment(params) {
         console.log(`Couldn't scale up deployment ${params.deploymentName} in namespace ${params.namespace}. Error: ${JSON.stringify(error)}`);
     }
 }
+export { createNamespace, listConfigMaps, listNamespaces, scaleDeployment };

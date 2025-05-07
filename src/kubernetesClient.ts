@@ -1,10 +1,10 @@
-import * as k8s from "@kubernetes/client-node";
+import { AppsV1Api, CoreV1Api, KubeConfig } from "@kubernetes/client-node";
 
-const kubeConfig = new k8s.KubeConfig();
+const kubeConfig = new KubeConfig();
 kubeConfig.loadFromDefault();
 
-const coreApiClient = kubeConfig.makeApiClient(k8s.CoreV1Api);
-const appsApiClient = kubeConfig.makeApiClient(k8s.AppsV1Api);
+const coreApiClient = kubeConfig.makeApiClient(CoreV1Api);
+const appsApiClient = kubeConfig.makeApiClient(AppsV1Api);
 
 function getKubeConfig() {
 	return kubeConfig;
