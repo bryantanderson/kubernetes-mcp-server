@@ -1,15 +1,24 @@
 import { AppsV1Api, CoreV1Api, KubeConfig } from "@kubernetes/client-node";
-const kubeConfig = new KubeConfig();
-kubeConfig.loadFromDefault();
-const coreApiClient = kubeConfig.makeApiClient(CoreV1Api);
-const appsApiClient = kubeConfig.makeApiClient(AppsV1Api);
+let kubeConfig;
+let coreApiClient;
+let appsApiClient;
 function getKubeConfig() {
+    if (!kubeConfig) {
+        kubeConfig = new KubeConfig();
+        kubeConfig.loadFromDefault();
+    }
     return kubeConfig;
 }
 function getKubernetesCoreApiClient() {
+    if (!coreApiClient) {
+        coreApiClient = getKubeConfig().makeApiClient(CoreV1Api);
+    }
     return coreApiClient;
 }
 function getKubernetesAppsApiClient() {
+    if (!appsApiClient) {
+        appsApiClient = getKubeConfig().makeApiClient(AppsV1Api);
+    }
     return appsApiClient;
 }
 export { getKubeConfig, getKubernetesAppsApiClient, getKubernetesCoreApiClient, };

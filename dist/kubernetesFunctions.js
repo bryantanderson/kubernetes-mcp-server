@@ -3,6 +3,9 @@ import { getKubernetesAppsApiClient, getKubernetesCoreApiClient, } from "./kuber
 async function listNamespaces() {
     try {
         const apiClient = getKubernetesCoreApiClient();
+        if (!apiClient) {
+            return;
+        }
         return await apiClient.listNamespace({
             timeoutSeconds: KUBERNETES_API_REQUEST_TIMEOUT_SECONDS,
         });
@@ -14,6 +17,9 @@ async function listNamespaces() {
 async function createNamespace(namespaceName) {
     try {
         const apiClient = getKubernetesCoreApiClient();
+        if (!apiClient) {
+            return;
+        }
         const namespace = await apiClient.createNamespace({
             body: {
                 metadata: {
@@ -30,6 +36,9 @@ async function createNamespace(namespaceName) {
 async function listConfigMaps(namespaceName) {
     try {
         const apiClient = getKubernetesCoreApiClient();
+        if (!apiClient) {
+            return;
+        }
         if (namespaceName) {
             return await apiClient.listNamespacedConfigMap({
                 namespace: namespaceName,
@@ -47,6 +56,9 @@ async function listConfigMaps(namespaceName) {
 async function scaleDeployment(params) {
     try {
         const apiClient = getKubernetesAppsApiClient();
+        if (!apiClient) {
+            return;
+        }
         const deployment = await apiClient.readNamespacedDeployment({
             name: params.deploymentName,
             namespace: params.namespace,
