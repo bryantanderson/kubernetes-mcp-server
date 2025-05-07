@@ -26,7 +26,7 @@ Note that the alias of the server can be anything. The following [guide](https:/
 
 Once the MCP server is configured correctly, you should be able to use the tools to interact with your cluster. Example:
 
-[Example Screenshot](./assets/Screenshot%202025-05-07%20at%2014.59.22.png)
+![Example Screenshot](./assets/Screenshot%202025-05-07%20at%2014.59.22.png)
 
 ## Debugging the server
 
