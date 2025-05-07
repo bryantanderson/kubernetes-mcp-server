@@ -1,0 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.KUBERNETES_API_REQUEST_TIMEOUT_SECONDS = void 0;
+const KUBERNETES_API_REQUEST_TIMEOUT_SECONDS = 30;
+exports.KUBERNETES_API_REQUEST_TIMEOUT_SECONDS = KUBERNETES_API_REQUEST_TIMEOUT_SECONDS;
