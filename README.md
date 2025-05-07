@@ -10,6 +10,8 @@ The quickest way to get a running cluster is to use `minikube`. Run `minikube st
 
 Without a running cluster set as the current context, the MCP server will not be functional. 
 
+Note that while none of the tools contain destructive behavior, it's best to be cautious when exposing access to your cluster.
+
 ## Running the server
 
 Locally: `npm run dev`
