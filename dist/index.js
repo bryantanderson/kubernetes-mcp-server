@@ -16,11 +16,7 @@ async function main() {
     await server.connect(transport);
     console.info("MCP Server running on stdio");
 }
-main()
-    .catch((error) => {
+main().catch((error) => {
     console.error("Fatal error in main():", error);
     process.exit(1);
-})
-    .finally(() => {
-    server.close();
 });

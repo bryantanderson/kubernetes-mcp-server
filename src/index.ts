@@ -21,11 +21,7 @@ async function main() {
 	console.info("MCP Server running on stdio");
 }
 
-main()
-	.catch((error) => {
-		console.error("Fatal error in main():", error);
-		process.exit(1);
-	})
-	.finally(() => {
-		server.close();
-	});
+main().catch((error) => {
+	console.error("Fatal error in main():", error);
+	process.exit(1);
+});
