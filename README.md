@@ -4,11 +4,11 @@ MCP server for managing a Kubernetes cluster
 
 ## Prerequisities
 
-An active Kubernetes cluster, set as the current context in `~/.kube/config`. The current context can be inspected using `kubectl config current-context`.
+A running Kubernetes cluster set as the current context in `~/.kube/config`. The current context can be inspected using `kubectl config current-context`.
 
-The quickest way to get an active cluster running is to use `minikube`. Run `minikube start` once installed.
+The quickest way to get a running cluster is to use `minikube`. Run `minikube start` once installed.
 
-Without an active cluster set as the current context, the MCP server will not be functional. 
+Without a running cluster set as the current context, the MCP server will not be functional. 
 
 ## Running the server
 
