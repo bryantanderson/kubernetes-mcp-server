@@ -12,7 +12,7 @@ Without an active cluster set as the current context, the MCP server will not be
 
 ## Running the server
 
-Locally: `npm run build && node ./dist/index.js`
+Locally: `npm run dev`
 
 Using Claude Desktop: Add the following to the `mcpServers` key of your `claude_desktop_config.json` file:
 ```
@@ -30,4 +30,4 @@ Once the MCP server is configured correctly, you should be able to use the tools
 
 ## Debugging the server
 
-Using MCP inspector: `npx @modelcontextprotocol/inspector node ./dist/index.js`
+Using MCP inspector: `npm run inspect`
